@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head><title>Form(session storage method)</title></head>
+<body>
+  <form id="userForm" action="/submit" method="POST" style="max-width: 500px; margin: 50px auto; padding: 20px; border: 2px solid #ddd; border-radius: 10px; font-family: Arial;">
+    <h2 style="text-align: center; color: #333;">User Registration</h2>
+    <div style="margin-bottom: 15px;">
+      <label style="display: inline-block; width: 100px; font-weight: bold;">Name:</label>
+      <input type="text" id="name" name="name" required style="width: 350px; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+      <span id="nameError" style="color: red; font-size: 12px;"></span>
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label style="display: inline-block; width: 100px; font-weight: bold;">Email:</label>
+      <input type="email" id="email" name="email" required style="width: 350px; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+      <span id="emailError" style="color: red; font-size: 12px;"></span>
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label style="display: inline-block; width: 100px; font-weight: bold;">Password:</label>
+      <input type="password" id="password" name="password" required style="width: 350px; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+      <span id="passwordError" style="color: red; font-size: 12px;"></span>
+    </div>
+    <button type="submit" style="width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;" onmouseover="this.style.background='#0056b3';" onmouseout="this.style.background='#007bff';">Submit</button>
+  </form>
+  <script>
+function validateField(input, errorSpan, condition, errorMsg) {
+  if (!condition(input.value)) {
+    errorSpan.textContent = errorMsg;
+    input.style.borderColor = 'red';
+    return false;
+  }
+  errorSpan.textContent = '';
+  input.style.borderColor = '#ccc';
+  return true;
+}
+
+document.getElementById('name').onblur = function() {
+  validateField(this, document.getElementById('nameError'), val => val.trim().length >= 2, 'Name must be 2+ characters');
+};
+
+document.getElementById('email').onblur = function() {
+  validateField(this, document.getElementById('emailError'), val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), 'Invalid email');
+};
+
+document.getElementById('password').onblur = function() {
+  validateField(this, document.getElementById('passwordError'), val => val.length >= 8, 'Password must be 8+ characters');
+};
+
+document.getElementById('userForm').onsubmit = function(e) {
+  let valid = validateField(document.getElementById('name'), document.getElementById('nameError'), val => val.trim().length >= 2, 'Name required');
+  valid &= validateField(document.getElementById('email'), document.getElementById('emailError'), val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), 'Valid email required');
+  valid &= validateField(document.getElementById('password'), document.getElementById('passwordError'), val => val.length >= 8, 'Password 8+ chars required');
+  if (!valid) e.preventDefault();
+};
+</script>
+
+</body>
+
+</html>
